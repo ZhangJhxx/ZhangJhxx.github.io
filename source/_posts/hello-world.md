@@ -1,5 +1,5 @@
 ---
-title: how to deploy your blog
+title: create a new page
 ---
 
 
