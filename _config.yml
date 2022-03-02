@@ -104,5 +104,5 @@ theme: next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: rm -rf .deploy_git/
+  repo: https://github.com/ZhangJhxx/ZhangJhxx.github.io.git
   branch: master

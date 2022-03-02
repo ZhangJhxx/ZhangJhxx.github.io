@@ -36,7 +36,7 @@ $ hexo deploy
 $ hexo d
 ```
 
-### 报错记录
+### 报错记录1
 ```
 Failed to connect to github.com port 443 after 21061 ms: Timed out
 FATAL {
@@ -59,3 +59,12 @@ FATAL {
 
 #### 最后
 `hexo clean && hexo g && hexo d`
+
+### 报错记录2
+```
+OpenSSL SSL_read: Connection was reset, errno 10054
+```
+> 首先，造成这个错误很有可能是网络不稳定，连接超时导致的，
+如果再次尝试后依然报错，可以执行下面的命令
+`git config --global http.sslVerify "false"`
+
