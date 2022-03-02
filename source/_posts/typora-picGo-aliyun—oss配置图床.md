@@ -10,13 +10,13 @@ tags: typora, picGo, oss
 
    <img src="https://me-file-list.oss-cn-beijing.aliyuncs.com/img/2022-03-02_091844.png" alt="2022-03-02_091844" style="zoom:50%;" /> 
 	
-	- 创建bucket
+	创建bucket
 	
-	  ![2022-03-02_092052](https://me-file-list.oss-cn-beijing.aliyuncs.com/img/2022-03-02_092052.png)
-	  bucket名称将在后续配置中用到
-	
-	  ![2022-03-02_092501](https://me-file-list.oss-cn-beijing.aliyuncs.com/img/2022-03-02_092501.png)
-	  个人使用可选择1年40G 9￥
+   ![2022-03-02_092052](https://me-file-list.oss-cn-beijing.aliyuncs.com/img/2022-03-02_092052.png)
+   bucket名称将在后续配置中用到
+
+   ![2022-03-02_092501](https://me-file-list.oss-cn-beijing.aliyuncs.com/img/2022-03-02_092501.png)
+   个人使用可选择1年40G 9￥
 
 ### 2. 下载并配置PicGo 
 
