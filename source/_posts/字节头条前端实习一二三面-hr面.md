@@ -3,7 +3,7 @@ title: 2022字节头条前端实习一二三面+hr面
 date: 2022-03-02 16:56:03
 tags: 字节, 前端面试
 ---
-> 挂了hr面
+> 挂了hr面，当时还是觉得比较可惜
 ### 一面
 
 1. 问css: less,sass（可能还问了stylus） 平时有没有在用，熟悉mixin吗
@@ -119,14 +119,17 @@ tags: 字节, 前端面试
 
 6. 版本对比
 
-   类似 https://leetcode-cn.com/problems/compare-version-numbers/
+  类似 https://leetcode-cn.com/problems/compare-version-numbers/
 
 7. react 中setState多次操作，一共会render几次
 
 8. promise setInterval setTimeout 对比
 
 9. 浏览器事件环 EventLoop
-
+  当微任务正在执行时，有一个同步任务进入，此时会执行哪个任务？
+  当时回答微任务挂起，执行同步任务。×
+  应该是不会终止微任务的执行的。
+  https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
 
 ### 二面
 1. UDP和HTTP协议是如何连接的
@@ -279,3 +282,10 @@ tags: 字节, 前端面试
 
 4. 问项目相关
 5. react JSX是什么，源码相关
+6. 开源协议
+7. package.json 相关
+    script中的命令 默认情况下 会去node_modules/bin下查找，故直接执行右边有可能出错。
+    eg.
+    "serve":"webpack serve --mode=development"
+    没有全局安装webpack，执行右边命令出错，但是执行npm run serve正常
+  
