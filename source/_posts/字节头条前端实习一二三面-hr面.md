@@ -1,7 +1,7 @@
 ---
 title: 2022字节头条前端实习一二三面+hr面
 date: 2022-03-02 16:56:03
-tags: 前端面试
+tags: 字节, 前端面试
 ---
 > 挂了hr面
 ### 一面
@@ -125,11 +125,83 @@ tags: 前端面试
 
 8. promise setInterval setTimeout 对比
 
-   浏览器事件环
+9. 浏览器事件环 EventLoop
 
 
 ### 二面
+1. UDP和HTTP协议是如何连接的
+
+   是个坑，HTTP下层的传输层协议为TCP
+
+2. 问项目
+
+3. 封装get
+
+   大概是这样的
+
+   ```js
+   const o = {
+     a:{
+       b:{
+         c:1
+       }
+     }
+   };
+   function get(obj,selectStr){
+     let splitStr = selectStr.split(".");
+     let target = obj;
+     for(let i = 0;i<splitStr.length;i++){
+       target = target[splitStr[i]];
+     }
+     return target;
+   }
+   ```
+
+4. 手写throttle/debounce
+
+   ```js
+   function throttle(callback,delay){
+     let timer;
+     return function(){
+       const context = this;
+       const args = [...arguments];
+       if(timer){
+         return;
+       }
+       timer = setTimeout(()=>{
+         callback.apply(context,args);
+         timer = null;
+       },delay);
+     }
+   }
+   ```
+
+   ```js
+   function debounce(callback,delay,immediate){//immediate标记是否立即被调用
+     let timer;
+     return function(){
+       const context = this;
+       const args = [...arguments];
+       clearTimeout(timer);
+       if(immediate){
+         let startNow = !timer;
+         timer = setTimeout(()=>{
+           timer = null;
+         },delay);
+         if(startNow) callback.apply(context,args);
+       }else{
+         timer = setTimeout(()=>{
+           callback.apply(context,args);
+         },delay)
+       }
+     }
+   }
+   ```
+
+5. 考虑如何实现用户勾选“记住我”的功能
+
 ### 三面
+
 1. 行内元素与块级元素对比，列举常用的行内元素
 
    - `b`,`big`,`i`,`small`
@@ -204,4 +276,6 @@ tags: 前端面试
 
    classnames, axios, @testing-library/react, react-create-app,webpack,lodash
 
-   
+
+4. 问项目相关
+5. react JSX是什么，源码相关
