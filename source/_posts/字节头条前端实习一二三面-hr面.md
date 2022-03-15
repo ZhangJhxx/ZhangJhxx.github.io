@@ -1,10 +1,14 @@
 ---
 title: 2022字节头条前端实习一二三面+hr面
 date: 2022-03-02 16:56:03
-tags: 字节, 前端面试
+tags: 
+- 字节
+- 前端面试
+categories: 
+- 面试
 ---
 > 挂了hr面，当时还是觉得比较可惜
-### 一面
+### 一面 1月28日
 
 1. 问css: less,sass（可能还问了stylus） 平时有没有在用，熟悉mixin吗
 
@@ -126,12 +130,12 @@ tags: 字节, 前端面试
 8. promise setInterval setTimeout 对比
 
 9. 浏览器事件环 EventLoop
-  当微任务正在执行时，有一个同步任务进入，此时会执行哪个任务？
-  当时回答微任务挂起，执行同步任务。×
-  应该是不会终止微任务的执行的。
-  https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
+    当微任务正在执行时，有一个同步任务进入，此时会执行哪个任务？
+    当时回答微任务挂起，执行同步任务。×
+    应该是不会终止微任务的执行的。
+    https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
 
-### 二面
+### 二面 2月11日
 1. UDP和HTTP协议是如何连接的
 
    是个坑，HTTP下层的传输层协议为TCP
@@ -203,7 +207,7 @@ tags: 字节, 前端面试
 
 5. 考虑如何实现用户勾选“记住我”的功能
 
-### 三面
+### 三面 2月24日
 
 1. 行内元素与块级元素对比，列举常用的行内元素
 
@@ -281,11 +285,18 @@ tags: 字节, 前端面试
 
 
 4. 问项目相关
+
 5. react JSX是什么，源码相关
+
 6. 开源协议
+
+    ![开源协议_01](https://me-file-list.oss-cn-beijing.aliyuncs.com/img/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE_01.jpg)
+
+    ![开源协议](https://me-file-list.oss-cn-beijing.aliyuncs.com/img/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE.png)
+
 7. package.json 相关
     script中的命令 默认情况下 会去node_modules/bin下查找，故直接执行右边有可能出错。
     eg.
     "serve":"webpack serve --mode=development"
     没有全局安装webpack，执行右边命令出错，但是执行npm run serve正常
-  
+

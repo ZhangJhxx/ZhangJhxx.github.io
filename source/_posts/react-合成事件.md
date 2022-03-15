@@ -1,7 +1,11 @@
 ---
 title: react 合成事件
 date: 2022-02-26 16:50:13
-tags: react,源码学习
+tags: 
+- react
+- 源码学习
+categories: 
+- react源码学习记录
 ---
 ### 合成事件
 React有自己的一套事件机制,它重新封装了绝大部分的原生事件。

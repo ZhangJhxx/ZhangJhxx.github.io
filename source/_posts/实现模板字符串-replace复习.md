@@ -1,7 +1,11 @@
 ---
 title: 实现模板字符串&replace复习
 date: 2022-02-27 20:13:15
-tags: 模板字符串实现, replace
+tags: 
+- 模板字符串实现
+- replace
+categories: 
+- 面试
 ---
 
 javaScript在线测试正则网站：https://regexr.com/

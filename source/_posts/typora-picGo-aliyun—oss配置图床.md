@@ -1,7 +1,12 @@
 ---
 title: typora+picGo+aliyun—oss配置图床
 date: 2022-03-02 08:52:01
-tags: typora, picGo, oss
+tags: 
+- typora
+- picGo
+- oss
+categories: 
+- 配置教程
 ---
 
 > 实现使用picGo+oss实现typora上传图片自动保存在阿里云
