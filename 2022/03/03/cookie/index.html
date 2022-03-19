@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zhangjhxx.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="为了解决Http无状态的问题【客户端与服务端会话状态的问题】，出现了cookie。  cookie的大小一般不超过4kb，它由一个名称（Name）、一个值（Value）和其它几个用于控制 Cookie 有效期、安全性、使用范围的可选属性组成   Name&#x2F;Value 用JavaScript操作Cookie注意对Value进行编码处理。 http:&#x2F;&#x2F;www.miaoqiyuan.cn&#x2F;p&#x2F;esc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cookie">
+<meta property="og:url" content="https://zhangjhxx.github.io/2022/03/03/cookie/index.html">
+<meta property="og:site_name" content="frontEnd_study">
+<meta property="og:description" content="为了解决Http无状态的问题【客户端与服务端会话状态的问题】，出现了cookie。  cookie的大小一般不超过4kb，它由一个名称（Name）、一个值（Value）和其它几个用于控制 Cookie 有效期、安全性、使用范围的可选属性组成   Name&#x2F;Value 用JavaScript操作Cookie注意对Value进行编码处理。 http:&#x2F;&#x2F;www.miaoqiyuan.cn&#x2F;p&#x2F;esc">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://me-file-list.oss-cn-beijing.aliyuncs.com/img/image-20220316201203229.png">
+<meta property="og:image" content="https://me-file-list.oss-cn-beijing.aliyuncs.com/img/2133762988-d56cfa55b282c615.png">
+<meta property="article:published_time" content="2022-03-03T11:57:19.000Z">
+<meta property="article:modified_time" content="2022-03-16T13:35:56.411Z">
+<meta property="article:author" content="xx">
+<meta property="article:tag" content="cookie">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://me-file-list.oss-cn-beijing.aliyuncs.com/img/image-20220316201203229.png">
+
+<link rel="canonical" href="https://zhangjhxx.github.io/2022/03/03/cookie/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>cookie | frontEnd_study</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">frontEnd_study</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhangjhxx.github.io/2022/03/03/cookie/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xx">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="frontEnd_study">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          cookie
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-03 19:57:19" itemprop="dateCreated datePublished" datetime="2022-03-03T19:57:19+08:00">2022-03-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-16 21:35:56" itemprop="dateModified" datetime="2022-03-16T21:35:56+08:00">2022-03-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>为了解决Http无状态的问题【客户端与服务端会话状态的问题】，出现了cookie。</p>
+</blockquote>
+<p>cookie的大小一般不超过4kb，它由一个名称（Name）、一个值（Value）和其它几个用于控制 Cookie 有效期、安全性、使用范围的可选属性组成</p>
+<p><img src="https://me-file-list.oss-cn-beijing.aliyuncs.com/img/image-20220316201203229.png" alt="image-20220316201203229"></p>
+<ul>
+<li><p>Name/Value</p>
+<p>用JavaScript操作Cookie注意对Value进行编码处理。</p>
+<p><a target="_blank" rel="noopener" href="http://www.miaoqiyuan.cn/p/escape-encodeuri-encodeuricomponent">http://www.miaoqiyuan.cn/p/escape-encodeuri-encodeuricomponent</a></p>
+</li>
+<li><p>Expires</p>
+<p>设置cookie过期时间</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set</span>-Cookie: id=asdfgB; Expires=Wed, <span class="number">21</span> Oct <span class="number">2022</span> <span class="number">07</span>:<span class="number">15</span>:<span class="number">00</span> GMT;</span><br></pre></td></tr></table></figure>
+
+<p>Expires属性缺省时，表示是会话性Cookie，Expire的值为Session，表示的就是会话性Cookie。当为会话性 Cookie 的时候，值保存在客户端==内存==中，并在用户关闭浏览器时失效。有些浏览器提供了会话恢复功能，会话期Cookie也会被保留下来。</p>
+<p>持久性Cookie保存在用户的==硬盘==中，直至过期或清除Cookie。</p>
+<p>过期的时间仅与客户端相关，而不是服务端</p>
+</li>
+<li><p>Max-Age</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set</span>-Cookie: id=asdfgB; Max-Age=<span class="number">80809</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>​        max-age:为负数时为会话形cookie，为正数为持久形cookie，为0时会立即删除这个cookie</p>
+<p>​        max-age的优先级高于expires</p>
+<ul>
+<li><p>Domain</p>
+<p>Domain指定了Cookie可送达的主机名。如果没有指定，默认为当前文档访问地址中的主机部分，但不包括子域名。</p>
+<p>将Domain设置为<code>.google.com</code>那么<code>a.google.com</code>和<code>b.google.com</code>都可以使用cookie</p>
+</li>
+<li><p>Path</p>
+<p>Path指定了一个URL路径，设置path为/test 则/test/doc 下的资源会携带Cookie首部，但/stu 不会携带这个首部</p>
+</li>
+</ul>
+<p>​        Domain和Path标识共同定义了Cookie的作用域，即cookie应该发送给那些URL</p>
+<ul>
+<li><p>Secure</p>
+<p>仅HTTPS协议传输</p>
+</li>
+<li><p>HTTPOnly</p>
+<p>防止客户端脚本通过document.cookie等方式访问Cookie，有助于避免XSS攻击</p>
+</li>
+<li><p>SameSite</p>
+<blockquote>
+<p>在跨站请求时不会被发送，从而阻止跨站请求伪造攻击（CSRF）</p>
+</blockquote>
+<ul>
+<li><p>Strict 仅一方请求携带Cookie，即浏览器只发送相同站点请求的Cookie，即当前网页URL与请求目标URL完全一致。</p>
+</li>
+<li><p>Lax允许部分第三方请求携带Cookie</p>
+</li>
+<li><p>None</p>
+<p>same-site（同站）/cross-site 与 同源策略中的same-origin/cross-origin不同</p>
+<p>same-site的判定较为宽松，cookie的同站判断==不考虑端口和协议==。只要两个URL的eTlLD+1相同即可。eTLD表示顶级域名<code>.com</code>，<code>.github.io</code>等，eTLD+1表示有效顶级域名+二级域名</p>
+<p><a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 与 <a target="_blank" rel="noopener" href="http://www.a.baidu.com是同站/">www.a.baidu.com是同站</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>​        a.github.io和b.github.io是跨站</p>
+<p><img src="https://me-file-list.oss-cn-beijing.aliyuncs.com/img/2133762988-d56cfa55b282c615.png" alt="2133762988-d56cfa55b282c615"></p>
+<p>​        参考： <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000022055666">https://segmentfault.com/a/1190000022055666</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cookie/" rel="tag"># cookie</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/02/%E5%AD%97%E8%8A%82%E5%A4%B4%E6%9D%A1%E5%89%8D%E7%AB%AF%E5%AE%9E%E4%B9%A0%E4%B8%80%E4%BA%8C%E4%B8%89%E9%9D%A2-hr%E9%9D%A2/" rel="prev" title="2022字节头条前端实习一二三面+hr面">
+      <i class="fa fa-chevron-left"></i> 2022字节头条前端实习一二三面+hr面
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/07/%E9%98%BF%E9%87%8C%E4%B8%80%E9%9D%A2/" rel="next" title="阿里一面">
+      阿里一面 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xx</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xx</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
