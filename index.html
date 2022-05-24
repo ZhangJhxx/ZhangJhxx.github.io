@@ -145,6 +145,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhangjhxx.github.io/2022/05/24/vue2-%E6%95%B0%E6%8D%AE%E5%8A%AB%E6%8C%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xx">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="frontEnd_study">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/24/vue2-%E6%95%B0%E6%8D%AE%E5%8A%AB%E6%8C%81/" class="post-title-link" itemprop="url">vue2 数据劫持</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-05-24 16:55:27 / Modified: 18:42:11" itemprop="dateCreated datePublished" datetime="2022-05-24T16:55:27+08:00">2022-05-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue2/" itemprop="url" rel="index"><span itemprop="name">vue2</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟更新方法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">update</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;更新视图&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义数据</span></span><br><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;xx&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">23</span>,</span><br><span class="line">  <span class="attr">address</span>:&#123;</span><br><span class="line">    <span class="attr">location</span>: <span class="string">&#x27;beijing&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将每一个属性用set和get劫持</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">  <span class="comment">//Object.defineProperty 只能用在对象上（数组不被识别）</span></span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">typeof</span> obj !== <span class="string">&#x27;object&#x27;</span>) <span class="keyword">return</span> obj;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> obj)&#123;</span><br><span class="line">    defineReactive(obj, key, obj[key]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span>(<span class="params">obj,key,value</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    <span class="function"><span class="title">get</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">set</span>(<span class="params">val</span>)</span>&#123;</span><br><span class="line">      value = val;</span><br><span class="line">      update();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line">observe(data);</span><br><span class="line">data.name = <span class="string">&quot;xiaohong&quot;</span>; <span class="comment">// logs 更新视图</span></span><br><span class="line"><span class="built_in">console</span>.log(data);</span><br></pre></td></tr></table></figure>
+
+<img src="https://me-file-list.oss-cn-beijing.aliyuncs.com/img/uTools_1653384042534.png" alt="uTools_1653384042534" style="zoom:80%;" /> 
+
+<p>可以看到address的location并没有被劫持，且set的新值val也没有被绑定。</p>
+<p>修改<code>defineReactive</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span>(<span class="params">obj,key,value</span>)</span>&#123;</span><br><span class="line">  observe(value);</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    <span class="function"><span class="title">get</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">set</span>(<span class="params">val</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(value !== val)&#123;</span><br><span class="line">        observe(val);       </span><br><span class="line">        value = val;</span><br><span class="line">      	update();</span><br><span class="line">			&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就能把所有属性都劫持了</p>
+<p>在进行数组测试时依然有问题</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data.address = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]; <span class="comment">// 触发 更新视图,</span></span><br><span class="line">data.address[<span class="number">0</span>] = <span class="number">100</span>; <span class="comment">//触发</span></span><br><span class="line">data.address.push(<span class="number">1000</span>); <span class="comment">// 不触发</span></span><br></pre></td></tr></table></figure>
+
+<p>覆盖数组原型上的属性</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> methods = [<span class="string">&#x27;push&#x27;</span>,<span class="string">&#x27;pop&#x27;</span>,<span class="string">&#x27;unshift&#x27;</span>,<span class="string">&#x27;shift&#x27;</span>,<span class="string">&#x27;reverse&#x27;</span>,<span class="string">&#x27;splice&#x27;</span>,<span class="string">&#x27;sort&#x27;</span>];</span><br><span class="line">methods.forEach(<span class="function"><span class="params">method</span>=&gt;</span>&#123;</span><br><span class="line">  <span class="comment">//面向切片开发</span></span><br><span class="line">  <span class="keyword">let</span> oldMethod = <span class="built_in">Array</span>.prototype[method];</span><br><span class="line">  <span class="built_in">Array</span>.prototype[method] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    update();</span><br><span class="line">    oldMethod.call(<span class="built_in">this</span>, ...arguments);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">data.address.push(<span class="number">1000</span>); <span class="comment">// 触发</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>done</strong></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://zhangjhxx.github.io/2022/05/24/deepclone-weekmap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -934,108 +1017,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://zhangjhxx.github.io/2022/03/09/%E9%A3%9E%E4%B9%A6%E4%B8%80%E9%9D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xx">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="frontEnd_study">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/09/%E9%A3%9E%E4%B9%A6%E4%B8%80%E9%9D%A2/" class="post-title-link" itemprop="url">飞书一面</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-09 17:05:22" itemprop="dateCreated datePublished" datetime="2022-03-09T17:05:22+08:00">2022-03-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-15 21:06:34" itemprop="dateModified" datetime="2022-03-15T21:06:34+08:00">2022-03-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li><p>盒模型</p>
-</li>
-<li><p>IE盒模型对比标准盒模型有什么区别</p>
-</li>
-<li><p>写代码：判断传入的参数类型（Array， String，Symbol，BigInt，NaN）</p>
-</li>
-<li><p>写代码：leetcode_139 单词拆分，出入参数dict:[“I”,”love”,”byte”,”bytedance]能否组成s:”ilovebytedance”（动态规划）</p>
-</li>
-<li><p>写代码：蛇形打印二叉树（z-字形打印二叉树）</p>
-</li>
-<li><p>写代码：数组扁平化去重</p>
-</li>
-<li><p>让一个盒子水平垂直居中</p>
-</li>
-<li><p>BFC是什么</p>
-<p>开启BFC的方法：</p>
-<ul>
-<li>float 除none</li>
-<li>overflow 除visible</li>
-<li>display inline-block table-cell table-caption</li>
-<li>position 除static 和relative</li>
-</ul>
-</li>
-<li><p>两栏布局的实现方法</p>
-</li>
-<li><p>```js<br>var a = “a”;<br>var b = “b”;<br>function x(){<br>  console.log(a);//undefined<br>  console.log(b);//const 暂时性死区<br>  var a = “123”;<br>  const b = “456”;<br>}<br>x();<br>//=======================================<br>const a = “a”;<br>const b = “b”;<br>function a(){<br>  console.log(a);<br>  console.log(b);<br>  var a = “123”;<br>  const b = “456”;<br>}<br>a();<br>// 报错 Identifier ‘a’ has already been declared</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">11. 读代码输出</span><br><span class="line"></span><br><span class="line">    &gt; 搞明白这一段就行</span><br><span class="line"></span><br><span class="line">    ```js</span><br><span class="line">    async function async1() &#123;</span><br><span class="line">      console.log(&#x27;async1 start&#x27;);</span><br><span class="line">      const res = await async2();</span><br><span class="line">      console.log(res,&quot;res&quot;);</span><br><span class="line">      console.log(&#x27;async1 end&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    async function async2() &#123;</span><br><span class="line">      console.log(&#x27;async2 start&#x27;);</span><br><span class="line">      return Promise.resolve(2);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    console.log(&#x27;script start&#x27;);</span><br><span class="line">    </span><br><span class="line">    setTimeout(function() &#123;</span><br><span class="line">      console.log(&#x27;setTimeout&#x27;);</span><br><span class="line">    &#125;, 0);</span><br><span class="line">    </span><br><span class="line">    async1();</span><br><span class="line">    </span><br><span class="line">    new Promise(function(resolve) &#123;</span><br><span class="line">      console.log(&#x27;promise1&#x27;);</span><br><span class="line">      resolve();</span><br><span class="line">    &#125;).then(function() &#123;</span><br><span class="line">      console.log(&#x27;promise2&#x27;);</span><br><span class="line">    &#125;)</span><br><span class="line">    console.log(&#x27;script end&#x27;);</span><br></pre></td></tr></table></figure></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1105,17 +1086,17 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

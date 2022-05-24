@@ -145,6 +145,114 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhangjhxx.github.io/2022/02/26/react-%E5%90%88%E6%88%90%E4%BA%8B%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xx">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="frontEnd_study">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/26/react-%E5%90%88%E6%88%90%E4%BA%8B%E4%BB%B6/" class="post-title-link" itemprop="url">react 合成事件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-26 16:50:13" itemprop="dateCreated datePublished" datetime="2022-02-26T16:50:13+08:00">2022-02-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-20 11:28:01" itemprop="dateModified" datetime="2022-03-20T11:28:01+08:00">2022-03-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/react%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">react源码学习记录</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="合成事件"><a href="#合成事件" class="headerlink" title="合成事件"></a>合成事件</h3><p>React有自己的一套事件机制,它重新封装了绝大部分的原生事件。</p>
+<p>由于fiber机制的特点，生成一个fiber节点时，它对应的dom节点有可能还未挂载，onClick这样的事件处理函数作为fiber节点的prop，也就不能直接被绑定到真实的DOM节点上。</p>
+<p>为此，React提供了一种“顶层注册，事件收集，统一触发”的事件机制。</p>
+<p>这套机制规避了无法将事件直接绑定到DOM节点上的问题，并且能够很好地利用fiber树的层级关系来生成事件执行路径，进而模拟事件捕获和冒泡，另外还带来两个非常重要的特性：</p>
+<ul>
+<li>对事件进行归类，可以在事件产生的任务上包含不同的优先级</li>
+<li>提供合成事件对象，抹平浏览器的兼容性差异</li>
+</ul>
+<p>REACT 16下</p>
+<blockquote>
+<p>合成事件采用了事件池，这样做可以大大节省内存，而不会频繁的创建和销毁事件对象。React并不是将click事件绑在该div的真实DOM上，而是在document处监听所有支持的事件，当事件发生并冒泡至document处时，React将事件内容封装并交由真正的处理函数运行。</p>
+</blockquote>
+<p>REACT 17下</p>
+<blockquote>
+<p>React 不再将事件添加在document 上，而是添加到渲染 React 树的根 DOM 容器中。并且除去了事件池</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/bZUQhR"><img src="https://s4.ax1x.com/2022/02/26/bZUQhR.md.png" alt="bZUQhR.md.png"></a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">const App = () =&gt;&#123;</span><br><span class="line">  const parentRef = useRef(null);</span><br><span class="line">  const childRef = useRef(null);</span><br><span class="line">  useEffect(()=&gt;&#123;</span><br><span class="line">    //绑定原生事件</span><br><span class="line">    parentRef.current.addEventListener(&quot;click&quot;,()=&gt;&#123;</span><br><span class="line">      console.log(&quot;原生----父元素捕获&quot;);</span><br><span class="line">    &#125;,true)</span><br><span class="line">    parentRef.current.addEventListener(&quot;click&quot;,()=&gt;&#123;</span><br><span class="line">      console.log(&quot;原生----父元素冒泡&quot;);</span><br><span class="line">    &#125;)</span><br><span class="line">    childRef.current.addEventListener(&quot;click&quot;,()=&gt;&#123;</span><br><span class="line">      console.log(&quot;原生----子元素捕获&quot;);</span><br><span class="line">    &#125;,true)</span><br><span class="line">    childRef.current.addEventListener(&quot;click&quot;,()=&gt;&#123;</span><br><span class="line">      console.log(&quot;原生----子元素冒泡&quot;);</span><br><span class="line">    &#125;)</span><br><span class="line">    document.addEventListener(&quot;click&quot;,()=&gt;&#123;</span><br><span class="line">      console.log(&quot;原生----document捕获&quot;);</span><br><span class="line">    &#125;,true)</span><br><span class="line">    document.addEventListener(&quot;click&quot;,()=&gt;&#123;</span><br><span class="line">      console.log(&quot;原生----document冒泡&quot;);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;,[]);</span><br><span class="line">  function parentBubble ()&#123;</span><br><span class="line">    console.log(&quot;react----父元素冒泡&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">  function childBubble ()&#123;</span><br><span class="line">    console.log(&quot;react----子元素冒泡&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">  function parentCapture ()&#123;</span><br><span class="line">    console.log(&quot;react----父元素捕获&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">  function childCapture ()&#123;</span><br><span class="line">    console.log(&quot;react----子元素捕获&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">  return (</span><br><span class="line">    //绑定react事件</span><br><span class="line">    &lt;div ref=&#123;parentRef&#125; onClick=&#123;parentBubble&#125; onClickCapture=&#123;parentCapture&#125;&gt;</span><br><span class="line">      &lt;div ref=&#123;childRef&#125; onClick=&#123;childBubble&#125; onClickCapture=&#123;childCapture&#125;&gt;</span><br><span class="line">        &lt;button&gt;事件捕获顺序&lt;/button&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;App /&gt;</span><br><span class="line">  ,document.getElementById(&#x27;root&#x27;)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在react16下的输出结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">原生----document捕获</span><br><span class="line">原生----父元素捕获</span><br><span class="line">原生----子元素捕获</span><br><span class="line">原生----子元素冒泡</span><br><span class="line">原生----父元素冒泡</span><br><span class="line">react----父元素捕获</span><br><span class="line">react----子元素捕获</span><br><span class="line">react----子元素冒泡</span><br><span class="line">react----父元素冒泡</span><br><span class="line">原生----document冒泡</span><br></pre></td></tr></table></figure></li>
+<li><p>在react17下得到输出：</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">原生----document捕获</span><br><span class="line">react----父元素捕获</span><br><span class="line">react----子元素捕获</span><br><span class="line">原生----父元素捕获</span><br><span class="line">原生----子元素捕获</span><br><span class="line">原生----子元素冒泡</span><br><span class="line">原生----父元素冒泡</span><br><span class="line">react----子元素冒泡</span><br><span class="line">react----父元素冒泡</span><br><span class="line">原生----document冒泡</span><br></pre></td></tr></table></figure>
+
+<h4 id="模拟react16下合成事件的实现"><a href="#模拟react16下合成事件的实现" class="headerlink" title="模拟react16下合成事件的实现"></a>模拟react16下合成事件的实现</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;parent&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;child&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span>&gt;</span>事件捕获顺序<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> parent = <span class="built_in">document</span>.getElementsByClassName(<span class="string">&quot;parent&quot;</span>)[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">const</span> child = <span class="built_in">document</span>.getElementsByClassName(<span class="string">&quot;child&quot;</span>)[<span class="number">0</span>];</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dispatchEvent</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> path = []; <span class="comment">//收集所有当前Node的上级目录</span></span><br><span class="line">  <span class="keyword">let</span> current = e.target;</span><br><span class="line">  <span class="keyword">while</span> (current) &#123;</span><br><span class="line">    path.push(current);</span><br><span class="line">    current = current.parentNode;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = path.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="keyword">if</span> (path[i].onClickCapture) &#123;</span><br><span class="line">      path[i].onClickCapture();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; path.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (path[i].onClick) &#123;</span><br><span class="line">      path[i].onClick();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//react的合成事件注册要在document注册之前</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&quot;click&quot;</span>, dispatchEvent);</span><br><span class="line">parent.addEventListener(<span class="string">&quot;click&quot;</span>,<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;原生----父元素捕获&quot;</span>)&#125;,<span class="literal">true</span>);</span><br><span class="line">parent.addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;原生----父元素冒泡&quot;</span>)&#125;);</span><br><span class="line">child.addEventListener(<span class="string">&quot;click&quot;</span>,<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;原生----子元素捕获&quot;</span>)&#125;,<span class="literal">true</span>);</span><br><span class="line">child.addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;原生----子元素冒泡&quot;</span>)&#125;);</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&quot;click&quot;</span>,<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;原生----document捕获&quot;</span>)&#125;,<span class="literal">true</span>);</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;原生----document冒泡&quot;</span>)&#125;);</span><br><span class="line"><span class="comment">//react合成事件</span></span><br><span class="line">parent.onClickCapture = <span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;react----父元素捕获&quot;</span>)&#125;;</span><br><span class="line">parent.onClick = <span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;react----父元素冒泡&quot;</span>)&#125;;</span><br><span class="line">child.onClickCapture = <span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;react----子元素捕获&quot;</span>)&#125;;</span><br><span class="line">child.onClick = <span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&quot;react----子元素冒泡&quot;</span>)&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="模拟react17下合成事件的实现"><a href="#模拟react17下合成事件的实现" class="headerlink" title="模拟react17下合成事件的实现"></a>模拟react17下合成事件的实现</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;root&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;parent&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;child&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span>&gt;</span>事件捕获顺序<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> root = <span class="built_in">document</span>.getElementById(<span class="string">&quot;root&quot;</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dispatchEvent</span>(<span class="params">e,captureFlag</span>) </span>&#123;<span class="comment">//添加标志位</span></span><br><span class="line">  <span class="keyword">const</span> path = []; <span class="comment">//收集所有当前Node的上级目录</span></span><br><span class="line">  <span class="keyword">let</span> current = e.target;</span><br><span class="line">  <span class="keyword">while</span> (current) &#123;</span><br><span class="line">    path.push(current);</span><br><span class="line">    current = current.parentNode;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(captureFlag)&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = path.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">      <span class="keyword">if</span> (path[i].onClickCapture) &#123;</span><br><span class="line">        path[i].onClickCapture();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(!captureFlag)&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; path.length; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (path[i].onClick) &#123;</span><br><span class="line">        path[i].onClick();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//将绑定至document的事件绑定至根节点</span></span><br><span class="line">root.addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function">(<span class="params">e</span>)=&gt;</span>&#123;dispatchEvent(e)&#125;,<span class="literal">true</span>);</span><br><span class="line">root.addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function">(<span class="params">e</span>)=&gt;</span>&#123;dispatchEvent(e)&#125;,<span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://zhangjhxx.github.io/2022/02/09/%E6%89%8B%E6%92%95%E5%89%8D%E7%AB%AF%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -377,17 +485,17 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
